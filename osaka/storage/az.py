@@ -115,9 +115,9 @@ class Azure(osaka.base.StorageBase):
         #Setup cache, and fill it with listings
         self.cache["__top__"] = uri
         for item in collection:
-            if not (item.key == key or item.key.startswith(key+"/") or key == ""):
+            if not (item.name == key or item.name.startswith(key+"/") or key == ""):
                 continue
-            full = uriBase +"/"+ item.name + "/" + item.key
+            full = uriBase +"/"+ container + "/" + item.name
             self.cache[full] = item
             ret.append(full)
         return ret
