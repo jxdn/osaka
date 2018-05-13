@@ -93,10 +93,10 @@ class Azure(osaka.base.StorageBase):
         container,key = osaka.utils.get_container_and_path(urlparse.urlparse(uri).path)
         self.service.create_container(container)
         with osaka.storage.file.FileHandlerConversion(stream) as fn:
-            self.service.create_blob_from_stream(container, key, fn)
+            self.service.create_blob_from_path(container, key, fn)
         properties = self.service.get_blob_properties(container, key)
 
-        return properties.content_length
+        return properties.properties.content_length
     def listAllChildren(self,uri):
         '''
         List all children of the current uri
@@ -177,8 +177,8 @@ class Azure(osaka.base.StorageBase):
         @param uri: uri to remove
         '''
         container,key = osaka.utils.get_container_and_path(urlparse.urlparse(uri).path)
-        for b in self.service.list_blobs(cont,prefix=blob):
-            self.service.delete_blob(cont,b.name)
+        for b in self.service.list_blobs(container,prefix=key):
+            self.service.delete_blob(container,b.name)
 
     def getKeysWithPrefixURI(self,uri):
         '''
